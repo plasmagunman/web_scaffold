@@ -1,0 +1,13 @@
+html {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 50px;
+}
+body {
+  width: 800px;
+  margin: auto;
+  min-height: 100%;
+  box-sizing: border-box;
+  border-radius: 25px;
+  padding: 50px;
+}
