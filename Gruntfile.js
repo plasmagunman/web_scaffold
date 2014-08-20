@@ -3,12 +3,11 @@
 //  - concat css
 //  - concat js
 //  - compile less
-//  - install and concat bower components (bower.json)
+//  - bower components: .js and .css
 //  - clean
 //  - express / livereload
 //
 // TODO:
-//  - add normalize.css via bower
 //  - cp other assets
 //  - deploy
 //  - config (don't hardcode file paths)
@@ -73,6 +72,7 @@ module.exports = function (grunt) {
       dist: {
         packages: {
           jquery: '2.1.x',
+          'normalize-css': '3.0.x',
         },
         store: 'bower_components',
         dest: '<%= target_dir %>' + '/lib/',
