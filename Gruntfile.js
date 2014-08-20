@@ -69,18 +69,14 @@ module.exports = function (grunt) {
       },
     },
 
-    // install deps from `bower.json`
-    bower: {
-      install: {
-        options: {
-          copy: false, // don't copy , we will concat later
+    bowerful: {
+      dist: {
+        packages: {
+          jquery: '2.1.x',
         },
-      },
-    },
-    // concat all installed bower components
-    bower_concat: {
-      all: {
-        dest: '<%= target_dir %>' + '/js/bower.js',
+        store: 'bower_components',
+        dest: '<%= target_dir %>' + '/lib/',
+        destfile: 'bower',
       },
     },
 
@@ -105,6 +101,10 @@ module.exports = function (grunt) {
       options: {
         livereload: 35729, // default
       },
+      grunt: {
+        files: ['Gruntfile.js'],
+        tasks: ['bowerful'],
+      },
       html: {
         files: ['./src/html/**/*.html'],
         tasks: ['copy:html'],
@@ -121,17 +121,12 @@ module.exports = function (grunt) {
         files: ['./src/less/**/*.less'],
         tasks: ['less:default'],
       },
-      bower: {
-        files: ['./bower.json'],
-        tasks: ['bower:install', 'bower_concat'],
-      }
     },
 
   });
 
   [
-    'grunt-bower-concat',
-    'grunt-bower-task',
+    'grunt-bowerful',
     'grunt-contrib-clean',
     'grunt-contrib-concat',
     'grunt-contrib-copy',
@@ -142,8 +137,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'copy:html',
-    'bower:install',
-    'bower_concat',
+    'bowerful',
     'concat',
     'less:default',
   ]);
