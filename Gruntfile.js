@@ -3,14 +3,15 @@
 //  - concat css
 //  - concat js
 //  - compile less
+//  - install and concat bower components (bower.json)
 //  - clean
 //  - express / livereload
 //
 // TODO:
+//  - add normalize.css via bower
 //  - cp other assets
 //  - deploy
 //  - config (don't hardcode file paths)
-//  - add bower support
 //  - add target support (http://gruntjs.com/api/grunt.option)
 
 
@@ -19,8 +20,10 @@ module.exports = function (grunt) {
 
     target_dir: './dist/',
 
-    // remove target dir
-    clean: ['<%= target_dir %>'],
+    clean: [
+      '<%= target_dir %>',
+      'bower_components/',
+    ],
 
     copy: {
       // copy content of src/html, including subdirectories
@@ -66,6 +69,21 @@ module.exports = function (grunt) {
       },
     },
 
+    // install deps from `bower.json`
+    bower: {
+      install: {
+        options: {
+          copy: false, // don't copy , we will concat later
+        },
+      },
+    },
+    // concat all installed bower components
+    bower_concat: {
+      all: {
+        dest: '<%= target_dir %>' + '/js/bower.js',
+      },
+    },
+
     // serve content of target dir on http://localhost:8000/
     // includes watching for changes
     express: {
@@ -103,11 +121,17 @@ module.exports = function (grunt) {
         files: ['./src/less/**/*.less'],
         tasks: ['less:default'],
       },
+      bower: {
+        files: ['./bower.json'],
+        tasks: ['bower:install', 'bower_concat'],
+      }
     },
 
   });
 
   [
+    'grunt-bower-concat',
+    'grunt-bower-task',
     'grunt-contrib-clean',
     'grunt-contrib-concat',
     'grunt-contrib-copy',
@@ -116,6 +140,12 @@ module.exports = function (grunt) {
     'grunt-express',
   ].forEach(grunt.loadNpmTasks);
 
-  grunt.registerTask('build', ['copy:html', 'concat', 'less:default']);
+  grunt.registerTask('build', [
+    'copy:html',
+    'bower:install',
+    'bower_concat',
+    'concat',
+    'less:default',
+  ]);
   grunt.registerTask('serve', ['build', 'express:app', 'watch']);
 };

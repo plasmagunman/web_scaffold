@@ -1,0 +1,6 @@
+{
+  "name": "web_scaffold",
+  "dependencies": {
+    "jquery": "2.1.x"
+  }
+}
